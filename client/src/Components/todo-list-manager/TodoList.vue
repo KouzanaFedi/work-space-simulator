@@ -51,9 +51,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import TodoItem from '@/components/todo-list-manager/TodoItem.vue'
+import TodoItem from '@/Components/todo-list-manager/TodoItem.vue'
 import Update from '../../interfaces/todo-list-manager/Update'
-import EditDialog from '@/components/todo-list-manager/EditDialog.vue'
+import EditDialog from '@/Components/todo-list-manager/EditDialog.vue'
 
 export default Vue.extend({
   name: 'TodoList' as string,

@@ -1,8 +1,16 @@
 <template>
-  <v-container fluid fill-height class="pa-0">
-    <div class="content" id="contentDiv">
-      <browerView :url="{link: 'https://www.instagram.com/'}" />
+  <v-container
+    fluid
+    fill-height
+    class="pa-0"
+  >
+    <div
+      class="content"
+      id="contentDiv"
+    >
+      <!-- <browerView :url="{link: 'https://www.instagram.com/'}" /> -->
       <!-- <browerView :url="{link: 'https://www.google.com/'}" /> -->
+      <TodoList />
     </div>
     <sidebar />
   </v-container>
@@ -10,7 +18,9 @@
 
 <script >
 import sidebar from "../Components/Sidebar/sidebar.vue";
-import browerView from "../Components/Browser/BrowerVue";
+import TodoList from '@/Components/todo-list-manager/TodoList.vue'
+
+// import browerView from "../Components/Browser/BrowerVue";
 //import alarmMenu from "../Components/Alarm/AlarmMenu.vue";
 //import { Alarm } from "../Functions/Alarm/main.ts";
 
@@ -24,15 +34,16 @@ export default {
   }),
   components: {
     sidebar,
-    browerView
+    TodoList
+    // browerView
   },
-  created: function() {
+  created: function () {
     //
   },
   methods: {
     //
   },
-  mounted: function() {
+  mounted: function () {
     this.shit = this.oppai;
   }
 };

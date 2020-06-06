@@ -68,7 +68,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { TodoItemChild } from '../../interfaces/todo-list-manager/TodoItemChild'
-import EditDialog from '@/components/todo-list-manager/EditDialog.vue'
+import EditDialog from '@/Components/todo-list-manager/EditDialog.vue'
 import Update from '../../interfaces/todo-list-manager/Update'
 
 export default Vue.extend({

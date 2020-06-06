@@ -1,6 +1,10 @@
 <template>
   <v-row class="mx-4">
-    <v-btn block color="primary" @click.stop="ToggleDialog()">
+    <v-btn
+      block
+      color="primary"
+      @click.stop="ToggleDialog()"
+    >
       <v-icon>mdi-plus</v-icon>
     </v-btn>
   </v-row>

@@ -33,8 +33,8 @@
 import Vue, { PropType } from 'vue'
 import { TodoItem } from '../../interfaces/todo-list-manager/TodoItem'
 import Update from '../../interfaces/todo-list-manager/Update'
-import TodoItemChild from '@/components/todo-list-manager/TodoItemChild.vue'
-import TodoItemParent from '@/components/todo-list-manager/TodoItemParent.vue'
+import TodoItemChild from '@/Components/todo-list-manager/TodoItemChild.vue'
+import TodoItemParent from '@/Components/todo-list-manager/TodoItemParent.vue'
 
 
 export default Vue.extend({

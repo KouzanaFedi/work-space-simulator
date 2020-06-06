@@ -1,27 +1,52 @@
 <template>
   <div class="drawer">
-    <div class="tabs" id="tabList">
-      <v-btn color fab>
+    <div
+      class="tabs"
+      id="tabList"
+    >
+      <v-btn
+        color
+        fab
+      >
         <v-icon small>mdi-home</v-icon>
       </v-btn>
-      <v-btn color fab @click="newTab">
+      <v-btn
+        color
+        fab
+      >
         <v-icon small>mdi-plus</v-icon>
       </v-btn>
     </div>
 
     <div class="utils">
-      <v-btn color fab icon>
+      <v-btn
+        color
+        fab
+        icon
+      >
         <v-icon small>mdi-bell</v-icon>
       </v-btn>
-      <v-btn color fab icon>
+      <v-btn
+        color
+        fab
+        icon
+      >
         <v-icon small>mdi-bookmark</v-icon>
       </v-btn>
 
-      <v-btn color fab icon>
+      <v-btn
+        color
+        fab
+        icon
+      >
         <v-icon small>mdi-playlist-check</v-icon>
       </v-btn>
       <alarmMenu />
-      <v-btn color fab icon>
+      <v-btn
+        color
+        fab
+        icon
+      >
         <v-icon small>mdi-cog</v-icon>
       </v-btn>
     </div>
@@ -30,10 +55,10 @@
 
 <script>
 import alarmMenu from "../Alarm/AlarmMenu";
-import browserView from "../Browser/BrowerVue";
+// import browserView from "../Browser/BrowerVue";
 
-import Vue from "vue";
-const windowTab = Vue.extend(browserView);
+// import Vue from "vue";
+// const windowTab = Vue.extend(browserView);
 
 export default {
   components: { alarmMenu },
@@ -47,16 +72,16 @@ export default {
       ]
     };
   },
-  methods: {
-    newTab() {
-      const tabInstance = new windowTab({
-        propsData: { url: { link: "https://www.google.com/" } }
-      });
-      console.log(tabInstance);
-      tabInstance.$mount(); // pass nothing
-      document.getElementById("contentDiv").appendChild(tabInstance.$el);
-    }
-  }
+  // methods: {
+  //   newTab() {
+  //     const tabInstance = new windowTab({
+  //       propsData: { url: { link: "https://www.google.com/" } }
+  //     });
+  //     console.log(tabInstance);
+  //     tabInstance.$mount(); // pass nothing
+  //     document.getElementById("contentDiv").appendChild(tabInstance.$el);
+  //   }
+  // }
 };
 </script>
 
