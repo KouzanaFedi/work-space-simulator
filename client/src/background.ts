@@ -1,6 +1,9 @@
 'use strict'
 
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow, Notification } from 'electron'
+
+import path from 'path';
+
 import {
   createProtocol,
   installVueDevtools
@@ -17,8 +20,9 @@ protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: tru
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 800, height: 600, webPreferences: {
-      nodeIntegration: true
+    width: 1920, height: 1080, fullscreen: true, frame: false, webPreferences: {
+      nodeIntegration: true,
+      webviewTag: true
     }
   })
 
@@ -54,10 +58,14 @@ app.on('activate', () => {
   }
 })
 
+app.removeAllListeners('ready')
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
+  app.setAppUserModelId('com.myapp.Something')
+  // app.setAppUserModelId(process.execPath)
+
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
     // Devtools extensions are broken in Electron 6.0.0 and greater
@@ -72,7 +80,9 @@ app.on('ready', async () => {
     }
 
   }
+
   createWindow()
+
 })
 
 
