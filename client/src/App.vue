@@ -8,7 +8,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Home from '@/views/Home.vue';
-import TodoList from '@/components/todo-list-manager/TodoList.vue'
+import TodoList from '@/Components/todo-list-manager/TodoList.vue'
 
 export default Vue.extend({
   name: 'App',
