@@ -10,6 +10,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Controls from "../src/Components/Misc/windowControl.vue";
+import TodoList from '@/components/todo-list-manager/TodoList.vue'
 
 export default Vue.extend({
   name: "App",
