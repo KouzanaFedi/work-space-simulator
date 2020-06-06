@@ -1,52 +1,69 @@
 <template>
-  <v-card
-    class="mx-auto d-flex align-end flex-column scroll"
-    max-width="550"
-    max-height="750"
-    elevation="15"
+  <v-menu
+    :close-on-content-click="false"
+    :nudge-width="200"
+    offset-x
   >
-    <v-toolbar
-      dense
-      class="mx-auto mb-3"
-      min-width="500"
-    >
-      <v-toolbar-title>
-        Todo-list
-      </v-toolbar-title>
-
-      <v-spacer></v-spacer>
-
-      <v-toolbar-items>
-        <v-btn>Cancel</v-btn>
-        <v-btn
-          class="primary"
-          @click="toggleCreate"
-        >Create</v-btn>
-      </v-toolbar-items>
-    </v-toolbar>
-
-    <div v-if="todos.length>0">
-      <v-container
-        v-for="(todo,i) in todos"
-        :key="i"
+    <template v-slot:activator="{on}">
+      <v-btn
+        color
+        fab
+        icon
+        v-on="on"
       >
-        <TodoItem
-          :todoItem="todo"
-          :index="i"
-          :todosCount="todos.length"
-          @titleTaskChanged="updateTask"
-          @deleteTask="deleteTask"
-          @moveUp="moveUp"
-          @moveDown="moveDown"
-        />
-      </v-container>
-    </div>
-    <EditDialog
-      ref="editDialog"
-      @createParentTask="createParent"
-      :description="''"
-    />
-  </v-card>
+        <v-icon small>mdi-playlist-check</v-icon>
+      </v-btn>
+    </template>
+
+    <v-card
+      class="mx-auto d-flex align-end flex-column scroll"
+      max-width="550"
+      max-height="750"
+      elevation="15"
+    >
+      <v-toolbar
+        dense
+        class="mx-auto mb-3"
+        min-width="500"
+      >
+        <v-toolbar-title>
+          Todo-list
+        </v-toolbar-title>
+
+        <v-spacer></v-spacer>
+
+        <v-toolbar-items>
+          <v-btn>Cancel</v-btn>
+          <v-btn
+            class="primary"
+            @click="toggleCreate"
+          >Create</v-btn>
+        </v-toolbar-items>
+      </v-toolbar>
+
+      <div v-if="todos.length>0">
+        <v-container
+          v-for="(todo,i) in todos"
+          :key="i"
+        >
+          <TodoItem
+            :todoItem="todo"
+            :index="i"
+            :todosCount="todos.length"
+            @titleTaskChanged="updateTask"
+            @deleteTask="deleteTask"
+            @moveUp="moveUp"
+            @moveDown="moveDown"
+          />
+        </v-container>
+      </div>
+      <EditDialog
+        ref="editDialog"
+        @createParentTask="createParent"
+        :description="''"
+      />
+    </v-card>
+  </v-menu>
 </template>
 
 <script lang="ts">
