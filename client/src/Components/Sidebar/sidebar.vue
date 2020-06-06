@@ -33,14 +33,7 @@
       >
         <v-icon small>mdi-bookmark</v-icon>
       </v-btn>
-
-      <v-btn
-        color
-        fab
-        icon
-      >
-        <v-icon small>mdi-playlist-check</v-icon>
-      </v-btn>
+      <TodoList />
       <alarmMenu />
       <v-btn
         color
@@ -55,13 +48,16 @@
 
 <script>
 import alarmMenu from "../Alarm/AlarmMenu";
+import TodoList from '@/Components/todo-list-manager/TodoList.vue'
 // import browserView from "../Browser/BrowerVue";
 
 // import Vue from "vue";
 // const windowTab = Vue.extend(browserView);
 
 export default {
-  components: { alarmMenu },
+  components: {
+    alarmMenu,
+    TodoList  },
   data() {
     return {
       drawer: true,

@@ -10,7 +10,6 @@
     >
       <!-- <browerView :url="{link: 'https://www.instagram.com/'}" /> -->
       <!-- <browerView :url="{link: 'https://www.google.com/'}" /> -->
-      <TodoList />
     </div>
     <sidebar />
   </v-container>
@@ -18,7 +17,6 @@
 
 <script >
 import sidebar from "../Components/Sidebar/sidebar.vue";
-import TodoList from '@/Components/todo-list-manager/TodoList.vue'
 
 // import browerView from "../Components/Browser/BrowerVue";
 //import alarmMenu from "../Components/Alarm/AlarmMenu.vue";
@@ -34,7 +32,6 @@ export default {
   }),
   components: {
     sidebar,
-    TodoList
     // browerView
   },
   created: function () {
