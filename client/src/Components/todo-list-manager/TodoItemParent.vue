@@ -79,7 +79,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { TodoItem } from '../../interfaces/todo-list-manager/TodoItem'
+import TodoItem from '../../interfaces/todo-list-manager/TodoItem'
 import EditDialog from '@/Components/todo-list-manager/EditDialog.vue'
 
 

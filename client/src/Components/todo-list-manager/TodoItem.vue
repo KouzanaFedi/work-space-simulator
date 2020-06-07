@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { TodoItem } from '../../interfaces/todo-list-manager/TodoItem'
+import TodoItem from '../../interfaces/todo-list-manager/TodoItem'
 import Update from '../../interfaces/todo-list-manager/Update'
 import TodoItemChild from '@/Components/todo-list-manager/TodoItemChild.vue'
 import TodoItemParent from '@/Components/todo-list-manager/TodoItemParent.vue'

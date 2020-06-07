@@ -1,11 +1,11 @@
 <template>
   <v-menu
     :close-on-content-click="false"
-    :nudge-width="200"
     offset-x
   >
     <template v-slot:activator="{on}">
       <v-btn
+        style="z-index:10"
         color
         fab
         icon
@@ -14,72 +14,79 @@
         <v-icon small>mdi-playlist-check</v-icon>
       </v-btn>
     </template>
-
-    <v-card
-      class="mx-auto d-flex align-end flex-column no-scroll"
-      max-width="550"
-      min-width="550"
-      max-height="650"
-      min-height="650"
-      elevation="15"
+    <vue-draggable-resizable
+      :resizable="false"
+      :parent="true"
     >
 
-      <v-container
-        class="scroll d-flex flex-column"
-        v-if="todos.length>0"
+      <v-card
+        class="mx-auto d-flex align-end flex-column no-scroll"
+        max-width="550"
+        min-width="550"
+        max-height="650"
+        min-height="650"
+        elevation="15"
       >
-        <TodoItem
-          v-for="(todo,i) in todos"
-          :key="i"
-          :todoItem="todo"
-          :index="i"
-          :todosCount="todos.length"
-          @titleTaskChanged="updateTask"
-          @deleteTask="deleteTask"
-          @moveUp="moveUp"
-          @moveDown="moveDown"
-        />
-      </v-container>
-      <p style="height: 60px"></p>
 
-      <EditDialog
-        ref="editDialog"
-        @createParentTask="createParent"
-        :description="''"
-      />
-      <v-card-actions class="card-actions pa-0 ">
-
-        <v-container class="px-5">
-          <v-row justify="space-between">
-            <v-btn>
-              <v-icon>
-                mdi-close
-              </v-icon>
-            </v-btn>
-            Todo List
-            <span v-if="todos.length>0">
-              {{tasksDone}}/{{todos.length}}
-            </span>
-            <v-btn
-              class="primary"
-              @click="toggleCreate"
-            >
-              <v-icon>
-                mdi-plus
-              </v-icon>
-            </v-btn>
-          </v-row>
+        <v-container
+          class="scroll d-flex flex-column"
+          v-if="todos.length>0"
+        >
+          <TodoItem
+            v-for="(todo,i) in todos"
+            :key="i"
+            :todoItem="todo"
+            :index="i"
+            :todosCount="todos.length"
+            @titleTaskChanged="updateTask"
+            @deleteTask="deleteTask"
+            @moveUp="moveUp"
+            @moveDown="moveDown"
+          />
         </v-container>
-      </v-card-actions>
-    </v-card>
+        <p style="height: 60px"></p>
+
+        <EditDialog
+          ref="editDialog"
+          @createParentTask="createParent"
+          :description="''"
+        />
+        <v-card-actions class="card-actions pa-0 ">
+
+          <v-container class="px-5">
+            <v-row justify="space-between">
+              <v-btn>
+                <v-icon>
+                  mdi-close
+                </v-icon>
+              </v-btn>
+              Todo List
+              <span v-if="todos.length>0">
+                {{tasksDone}}/{{todos.length}}
+              </span>
+              <v-btn
+                class="primary"
+                @click="toggleCreate"
+              >
+                <v-icon>
+                  mdi-plus
+                </v-icon>
+              </v-btn>
+            </v-row>
+          </v-container>
+        </v-card-actions>
+      </v-card>
+    </vue-draggable-resizable>
   </v-menu>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import TodoItem from '@/Components/todo-list-manager/TodoItem.vue'
+import TodoItemC from '../../interfaces/todo-list-manager/TodoItem'
 import Update from '../../interfaces/todo-list-manager/Update'
 import EditDialog from '@/Components/todo-list-manager/EditDialog.vue'
+import VueDraggableResizable from 'vue-draggable-resizable'
 
 export default Vue.extend({
   name: 'TodoList' as string,
@@ -120,14 +127,22 @@ export default Vue.extend({
     },
   },
   computed: {
-    tasksDone() {
+    tasksDone(): number {
       const init = 0
-      const reducer = (accu, item) => {
+      const reducer = (accu: number, item: TodoItemC) => {
         if (item.done) {
           return ++accu
         } else return accu
       }
       return this.todos.reduce(reducer, init)
+    },
+    wWidth() {
+      console.log(window.innerWidth)
+      return window.innerWidth
+    },
+    wHeight() {
+      console.log(window.innerHeight)
+      return window.innerHeight
     }
   },
   data() {
@@ -207,5 +222,12 @@ export default Vue.extend({
   z-index: 5;
   border-radius: 5px 5px 0px 0px;
   box-shadow: 0 -5px 0 0px rgba($color: rgb(71, 71, 71), $alpha: 0.1);
+}
+
+.v-menu__content {
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  width: 100vw !important;
+  height: 100vh !important;
 }
 </style>

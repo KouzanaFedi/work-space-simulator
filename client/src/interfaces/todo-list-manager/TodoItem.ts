@@ -1,6 +1,6 @@
-import { TodoItemChild } from './TodoItemChild';
+import TodoItemChild from './TodoItemChild';
 
-export interface TodoItem extends TodoItemChild {
+export default interface TodoItem extends TodoItemChild {
     children: TodoItemChild[]
 }
 
