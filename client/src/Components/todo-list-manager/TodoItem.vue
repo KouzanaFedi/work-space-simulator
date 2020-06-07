@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-0">
+  <div>
     <TodoItemParent
       :todoItem="todoItem"
       :index="index"
@@ -10,28 +10,24 @@
       @moveDown="moveDown"
     />
     <div v-if="todoItem.children.length>0">
-      <v-container
+      <TodoItemChild
         v-for="(child,j) in todoItem.children"
         :key="j"
-        class="pb-0"
-      >
-        <TodoItemChild
-          :todoItemChild="child"
-          :index="j"
-          @deleteChildTask="deleteChildTask"
-          @titleChildTaskChanged="updateChildTask"
-          :childrenCount="todoItem.children.length"
-          @moveChildDown="moveChildDown"
-          @moveChildUp="moveChildUp"
-        />
-      </v-container>
+        :todoItemChild="child"
+        :index="j"
+        @deleteChildTask="deleteChildTask"
+        @titleChildTaskChanged="updateChildTask"
+        :childrenCount="todoItem.children.length"
+        @moveChildDown="moveChildDown"
+        @moveChildUp="moveChildUp"
+      />
     </div>
-  </v-container>
+  </div>
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { TodoItem } from '../../interfaces/todo-list-manager/TodoItem'
+import TodoItem from '../../interfaces/todo-list-manager/TodoItem'
 import Update from '../../interfaces/todo-list-manager/Update'
 import TodoItemChild from '@/Components/todo-list-manager/TodoItemChild.vue'
 import TodoItemParent from '@/Components/todo-list-manager/TodoItemParent.vue'

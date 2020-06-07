@@ -1,17 +1,24 @@
 <template>
   <v-card
-    class="d-flex mx-auto "
-    min-width="486"
+    class="d-flex mt-6"
+    min-width="516"
+    max-width="516"
     elevation="20"
     style="position: relative;"
-    height="90px"
+    min-height="90px"
   >
     <v-card-text class="py-0">
-      <v-checkbox
-        class="wrap-text ml-auto"
-        v-model="todoItem.done"
-        :label="todoItem.title"
-      > </v-checkbox>
+      <v-container>
+        <v-checkbox v-model="todoItem.done">
+          <template slot="label">
+            <div class="text-wrap">
+              <label for>
+                {{todoItem.title}}
+              </label>
+            </div>
+          </template>
+        </v-checkbox>
+      </v-container>
     </v-card-text>
     <v-btn
       absolute
@@ -72,7 +79,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { TodoItem } from '../../interfaces/todo-list-manager/TodoItem'
+import TodoItem from '../../interfaces/todo-list-manager/TodoItem'
 import EditDialog from '@/Components/todo-list-manager/EditDialog.vue'
 
 
@@ -140,7 +147,7 @@ export default Vue.extend({
 }
 
 .wrap-text {
-  max-width: 100% !important;
+  max-width: 80% !important;
   overflow: hidden;
   display: inline-block !important;
   overflow-wrap: break-word;

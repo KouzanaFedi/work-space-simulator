@@ -1,11 +1,11 @@
 <template>
   <v-menu
     :close-on-content-click="false"
-    :nudge-width="200"
     offset-x
   >
     <template v-slot:activator="{on}">
       <v-btn
+        style="z-index:10"
         color
         fab
         icon
@@ -14,39 +14,27 @@
         <v-icon small>mdi-playlist-check</v-icon>
       </v-btn>
     </template>
-
-    <v-card
-      class="mx-auto d-flex align-end flex-column scroll"
-      max-width="550"
-      max-height="750"
-      elevation="15"
+    <vue-draggable-resizable
+      :resizable="false"
+      :parent="true"
     >
-      <v-toolbar
-        dense
-        class="mx-auto mb-3"
-        min-width="500"
+
+      <v-card
+        class="mx-auto d-flex align-end flex-column no-scroll"
+        max-width="550"
+        min-width="550"
+        max-height="650"
+        min-height="650"
+        elevation="15"
       >
-        <v-toolbar-title>
-          Todo-list
-        </v-toolbar-title>
 
-        <v-spacer></v-spacer>
-
-        <v-toolbar-items>
-          <v-btn>Cancel</v-btn>
-          <v-btn
-            class="primary"
-            @click="toggleCreate"
-          >Create</v-btn>
-        </v-toolbar-items>
-      </v-toolbar>
-
-      <div v-if="todos.length>0">
         <v-container
-          v-for="(todo,i) in todos"
-          :key="i"
+          class="scroll d-flex flex-column"
+          v-if="todos.length>0"
         >
           <TodoItem
+            v-for="(todo,i) in todos"
+            :key="i"
             :todoItem="todo"
             :index="i"
             :todosCount="todos.length"
@@ -56,21 +44,49 @@
             @moveDown="moveDown"
           />
         </v-container>
-      </div>
-      <EditDialog
-        ref="editDialog"
-        @createParentTask="createParent"
-        :description="''"
-      />
-    </v-card>
+        <p style="height: 60px"></p>
+
+        <EditDialog
+          ref="editDialog"
+          @createParentTask="createParent"
+          :description="''"
+        />
+        <v-card-actions class="card-actions pa-0 ">
+
+          <v-container class="px-5">
+            <v-row justify="space-between">
+              <v-btn>
+                <v-icon>
+                  mdi-close
+                </v-icon>
+              </v-btn>
+              Todo List
+              <span v-if="todos.length>0">
+                {{tasksDone}}/{{todos.length}}
+              </span>
+              <v-btn
+                class="primary"
+                @click="toggleCreate"
+              >
+                <v-icon>
+                  mdi-plus
+                </v-icon>
+              </v-btn>
+            </v-row>
+          </v-container>
+        </v-card-actions>
+      </v-card>
+    </vue-draggable-resizable>
   </v-menu>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import TodoItem from '@/Components/todo-list-manager/TodoItem.vue'
+import TodoItemC from '../../interfaces/todo-list-manager/TodoItem'
 import Update from '../../interfaces/todo-list-manager/Update'
 import EditDialog from '@/Components/todo-list-manager/EditDialog.vue'
+import VueDraggableResizable from 'vue-draggable-resizable'
 
 export default Vue.extend({
   name: 'TodoList' as string,
@@ -107,9 +123,26 @@ export default Vue.extend({
         done: false,
         children: []
       }
-      console.log(parent);
-
       this.todos.push(parent)
+    },
+  },
+  computed: {
+    tasksDone(): number {
+      const init = 0
+      const reducer = (accu: number, item: TodoItemC) => {
+        if (item.done) {
+          return ++accu
+        } else return accu
+      }
+      return this.todos.reduce(reducer, init)
+    },
+    wWidth() {
+      console.log(window.innerWidth)
+      return window.innerWidth
+    },
+    wHeight() {
+      console.log(window.innerHeight)
+      return window.innerHeight
     }
   },
   data() {
@@ -161,6 +194,10 @@ export default Vue.extend({
   overflow: auto;
 }
 
+.no-scroll {
+  overflow: hidden;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -175,5 +212,22 @@ export default Vue.extend({
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(58, 53, 53, 0.5);
   box-shadow: inset 0 0 6px rgba(58, 53, 53, 0.5);
+}
+
+.card-actions {
+  position: absolute;
+  bottom: 0;
+  background-color: #202020;
+  width: 550px;
+  z-index: 5;
+  border-radius: 5px 5px 0px 0px;
+  box-shadow: 0 -5px 0 0px rgba($color: rgb(71, 71, 71), $alpha: 0.1);
+}
+
+.v-menu__content {
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  width: 100vw !important;
+  height: 100vh !important;
 }
 </style>
