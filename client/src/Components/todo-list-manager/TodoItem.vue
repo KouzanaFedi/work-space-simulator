@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-0">
+  <div>
     <TodoItemParent
       :todoItem="todoItem"
       :index="index"
@@ -10,23 +10,19 @@
       @moveDown="moveDown"
     />
     <div v-if="todoItem.children.length>0">
-      <v-container
+      <TodoItemChild
         v-for="(child,j) in todoItem.children"
         :key="j"
-        class="pb-0"
-      >
-        <TodoItemChild
-          :todoItemChild="child"
-          :index="j"
-          @deleteChildTask="deleteChildTask"
-          @titleChildTaskChanged="updateChildTask"
-          :childrenCount="todoItem.children.length"
-          @moveChildDown="moveChildDown"
-          @moveChildUp="moveChildUp"
-        />
-      </v-container>
+        :todoItemChild="child"
+        :index="j"
+        @deleteChildTask="deleteChildTask"
+        @titleChildTaskChanged="updateChildTask"
+        :childrenCount="todoItem.children.length"
+        @moveChildDown="moveChildDown"
+        @moveChildUp="moveChildUp"
+      />
     </div>
-  </v-container>
+  </div>
 </template>
 
 <script lang="ts">

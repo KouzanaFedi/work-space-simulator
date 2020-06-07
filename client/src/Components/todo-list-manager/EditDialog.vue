@@ -4,47 +4,49 @@
     width="350px"
     persistent
   >
-    <v-container>
-      <v-textarea
-        label="Task description"
-        v-model="taskDescription"
-        :rules="[rules.required]"
-        auto-grow
-        clearable
-        :counter="maxChars"
-        dense
-        rows=1
-        type="text"
-        filled
-        :value="description"
-      >
-
-      </v-textarea>
-    </v-container>
-
-    <v-container>
-      <v-row justify="space-between">
-        <v-btn
-          @click="close"
-          color="error"
-          class="ml-5"
+    <v-card>
+      <v-container>
+        <v-textarea
+          label="Task description"
+          v-model="taskDescription"
+          :rules="[rules.required]"
+          auto-grow
+          clearable
+          :counter="maxChars"
+          dense
+          rows=1
+          type="text"
+          filled
+          :value="description"
         >
-          <v-icon>
-            mdi-close
-          </v-icon>
-        </v-btn>
 
-        <v-btn
-          color="success"
-          class="mr-5"
-          @click="submit"
-        >
-          <v-icon>
-            mdi-check
-          </v-icon>
-        </v-btn>
-      </v-row>
-    </v-container>
+        </v-textarea>
+      </v-container>
+
+      <v-container>
+        <v-row justify="space-between">
+          <v-btn
+            @click="close"
+            color="error"
+            class="ml-5"
+          >
+            <v-icon>
+              mdi-close
+            </v-icon>
+          </v-btn>
+
+          <v-btn
+            color="success"
+            class="mr-5"
+            @click="submit"
+          >
+            <v-icon>
+              mdi-check
+            </v-icon>
+          </v-btn>
+        </v-row>
+      </v-container>
+    </v-card>
   </v-dialog>
 </template>
 
@@ -57,7 +59,7 @@ export default Vue.extend({
     return {
       active: false,
       taskDescription: '',
-      maxChars: 64,
+      maxChars: 128,
       rules: {
         required: (value: string) => !!value || 'Required'
       },
@@ -132,6 +134,3 @@ export default Vue.extend({
   }
 })
 </script>
-
-<style lang="scss" scoped>
-</style>

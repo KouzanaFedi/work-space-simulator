@@ -16,52 +16,61 @@
     </template>
 
     <v-card
-      class="mx-auto d-flex align-end flex-column scroll"
+      class="mx-auto d-flex align-end flex-column no-scroll"
       max-width="550"
-      max-height="750"
+      min-width="550"
+      max-height="650"
+      min-height="650"
       elevation="15"
     >
-      <v-toolbar
-        dense
-        class="mx-auto mb-3"
-        min-width="500"
+
+      <v-container
+        class="scroll d-flex flex-column"
+        v-if="todos.length>0"
       >
-        <v-toolbar-title>
-          Todo-list
-        </v-toolbar-title>
-
-        <v-spacer></v-spacer>
-
-        <v-toolbar-items>
-          <v-btn>Cancel</v-btn>
-          <v-btn
-            class="primary"
-            @click="toggleCreate"
-          >Create</v-btn>
-        </v-toolbar-items>
-      </v-toolbar>
-
-      <div v-if="todos.length>0">
-        <v-container
+        <TodoItem
           v-for="(todo,i) in todos"
           :key="i"
-        >
-          <TodoItem
-            :todoItem="todo"
-            :index="i"
-            :todosCount="todos.length"
-            @titleTaskChanged="updateTask"
-            @deleteTask="deleteTask"
-            @moveUp="moveUp"
-            @moveDown="moveDown"
-          />
-        </v-container>
-      </div>
+          :todoItem="todo"
+          :index="i"
+          :todosCount="todos.length"
+          @titleTaskChanged="updateTask"
+          @deleteTask="deleteTask"
+          @moveUp="moveUp"
+          @moveDown="moveDown"
+        />
+      </v-container>
+      <p style="height: 60px"></p>
+
       <EditDialog
         ref="editDialog"
         @createParentTask="createParent"
         :description="''"
       />
+      <v-card-actions class="card-actions pa-0 ">
+
+        <v-container class="px-5">
+          <v-row justify="space-between">
+            <v-btn>
+              <v-icon>
+                mdi-close
+              </v-icon>
+            </v-btn>
+            Todo List
+            <span v-if="todos.length>0">
+              {{tasksDone}}/{{todos.length}}
+            </span>
+            <v-btn
+              class="primary"
+              @click="toggleCreate"
+            >
+              <v-icon>
+                mdi-plus
+              </v-icon>
+            </v-btn>
+          </v-row>
+        </v-container>
+      </v-card-actions>
     </v-card>
   </v-menu>
 </template>
@@ -107,9 +116,18 @@ export default Vue.extend({
         done: false,
         children: []
       }
-      console.log(parent);
-
       this.todos.push(parent)
+    },
+  },
+  computed: {
+    tasksDone() {
+      const init = 0
+      const reducer = (accu, item) => {
+        if (item.done) {
+          return ++accu
+        } else return accu
+      }
+      return this.todos.reduce(reducer, init)
     }
   },
   data() {
@@ -161,6 +179,10 @@ export default Vue.extend({
   overflow: auto;
 }
 
+.no-scroll {
+  overflow: hidden;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -175,5 +197,15 @@ export default Vue.extend({
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(58, 53, 53, 0.5);
   box-shadow: inset 0 0 6px rgba(58, 53, 53, 0.5);
+}
+
+.card-actions {
+  position: absolute;
+  bottom: 0;
+  background-color: #202020;
+  width: 550px;
+  z-index: 5;
+  border-radius: 5px 5px 0px 0px;
+  box-shadow: 0 -5px 0 0px rgba($color: rgb(71, 71, 71), $alpha: 0.1);
 }
 </style>
