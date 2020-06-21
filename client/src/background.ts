@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, Notification } from 'electron'
+import { app, protocol, BrowserWindow, Notification, ipcMain } from 'electron'
 
 import path from 'path';
 
@@ -13,6 +13,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win: BrowserWindow | null
+let todoWin: BrowserWindow | null
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }])
@@ -41,6 +42,41 @@ function createWindow() {
   })
 }
 
+function createWindowTodoList() {
+  // Create the browser window.
+  if (todoWin != null) {
+    todoWin.show()
+    return
+  }
+  todoWin = new BrowserWindow({
+    width: 570, height: 660, fullscreen: false, frame: false, webPreferences: {
+      nodeIntegration: true,
+      webviewTag: true
+    },
+    skipTaskbar: true,
+    resizable: false
+  })
+  todoWin.setParentWindow(win as BrowserWindow)
+  todoWin.setPosition(20, 400)
+  if (process.env.WEBPACK_DEV_SERVER_URL) {
+    // Load the url of the dev server if in development mode
+    todoWin.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string + "#/todoList")
+    //   if (!process.env.IS_TEST) win.webContents.openDevTools()
+    // } else {
+    //   createProtocol('app')
+    //   // Load the index.html when not in development
+    //   win.loadURL('app://./index.html')
+    // }
+
+    // win.on('closed', () => {
+    //   win = null
+    // })
+  }
+}
+ipcMain.on('close-todo-list', () => {
+  todoWin?.hide()
+})
+
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
   // On macOS it is common for applications and their menu bar
@@ -58,6 +94,13 @@ app.on('activate', () => {
   }
 })
 
+ipcMain.on('close-win', () => {
+  win?.close()
+})
+
+ipcMain.on('minimize-win', () => {
+  win?.minimize()
+})
 // app.removeAllListeners('ready')
 
 // This method will be called when Electron has finished
@@ -101,3 +144,7 @@ if (isDevelopment) {
     })
   }
 }
+
+ipcMain.on('open-todo-list', () => {
+  createWindowTodoList()
+})

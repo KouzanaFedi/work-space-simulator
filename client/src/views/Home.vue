@@ -4,6 +4,7 @@
     fill-height
     class="pa-0"
   >
+    <Controls />
     <div
       class="content"
       id="contentDiv"
@@ -13,10 +14,12 @@
     </div>
     <sidebar />
   </v-container>
+
 </template>
 
 <script >
 import sidebar from "../Components/Sidebar/sidebar.vue";
+import Controls from '@/Components/Misc/windowControl.vue';
 
 // import browerView from "../Components/Browser/BrowerVue";
 //import alarmMenu from "../Components/Alarm/AlarmMenu.vue";
@@ -32,6 +35,7 @@ export default {
   }),
   components: {
     sidebar,
+    Controls
     // browerView
   },
   created: function () {

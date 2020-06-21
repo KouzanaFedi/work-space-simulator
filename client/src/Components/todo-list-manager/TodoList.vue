@@ -1,83 +1,63 @@
 <template>
-  <v-menu
-    :close-on-content-click="false"
-    offset-x
-  >
-    <template v-slot:activator="{on}">
-      <v-btn
-        style="z-index:10"
-        color
-        fab
-        icon
-        v-on="on"
-      >
-        <v-icon small>mdi-playlist-check</v-icon>
-      </v-btn>
-    </template>
-    <vue-draggable-resizable
-      :resizable="false"
-      :parent="true"
+  <div>
+    <div class="draggable"></div>
+    <v-card
+      class="d-flex align-end flex-column no-scroll"
+      max-width="550"
+      min-width="550"
+      max-height="650"
+      min-height="650"
+      elevation="15"
     >
-
-      <v-card
-        class="mx-auto d-flex align-end flex-column no-scroll"
-        max-width="550"
-        min-width="550"
-        max-height="650"
-        min-height="650"
-        elevation="15"
+      <v-container
+        class="scroll d-flex flex-column"
+        v-if="todos.length>0"
       >
-
-        <v-container
-          class="scroll d-flex flex-column"
-          v-if="todos.length>0"
-        >
-          <TodoItem
-            v-for="(todo,i) in todos"
-            :key="i"
-            :todoItem="todo"
-            :index="i"
-            :todosCount="todos.length"
-            @titleTaskChanged="updateTask"
-            @deleteTask="deleteTask"
-            @moveUp="moveUp"
-            @moveDown="moveDown"
-          />
-        </v-container>
-        <p style="height: 60px"></p>
-
-        <EditDialog
-          ref="editDialog"
-          @createParentTask="createParent"
-          :description="''"
+        <TodoItem
+          v-for="(todo,i) in todos"
+          :key="i"
+          :todoItem="todo"
+          :index="i"
+          :todosCount="todos.length"
+          @titleTaskChanged="updateTask"
+          @deleteTask="deleteTask"
+          @moveUp="moveUp"
+          @moveDown="moveDown"
         />
-        <v-card-actions class="card-actions pa-0 ">
+      </v-container>
+      <!-- TOFIX this -->
+      <p style="height:150px !important;display:inline-block"></p>
 
-          <v-container class="px-5">
-            <v-row justify="space-between">
-              <v-btn>
-                <v-icon>
-                  mdi-close
-                </v-icon>
-              </v-btn>
-              Todo List
-              <span v-if="todos.length>0">
-                {{tasksDone}}/{{todos.length}}
-              </span>
-              <v-btn
-                class="primary"
-                @click="toggleCreate"
-              >
-                <v-icon>
-                  mdi-plus
-                </v-icon>
-              </v-btn>
-            </v-row>
-          </v-container>
-        </v-card-actions>
-      </v-card>
-    </vue-draggable-resizable>
-  </v-menu>
+      <EditDialog
+        ref="editDialog"
+        @createParentTask="createParent"
+        :description="''"
+      />
+      <v-card-actions class="card-actions pa-0 ">
+        <v-container class="px-5">
+          <v-row justify="space-between">
+            <v-btn @click="closeTodoWin">
+              <v-icon>
+                mdi-close
+              </v-icon>
+            </v-btn>
+            Todo List
+            <span v-if="todos.length>0">
+              {{tasksDone}}/{{todos.length}}
+            </span>
+            <v-btn
+              class="primary"
+              @click="toggleCreate"
+            >
+              <v-icon>
+                mdi-plus
+              </v-icon>
+            </v-btn>
+          </v-row>
+        </v-container>
+      </v-card-actions>
+    </v-card>
+  </div>
 </template>
 
 <script lang="ts">
@@ -87,6 +67,10 @@ import TodoItemC from '../../interfaces/todo-list-manager/TodoItem'
 import Update from '../../interfaces/todo-list-manager/Update'
 import EditDialog from '@/Components/todo-list-manager/EditDialog.vue'
 import VueDraggableResizable from 'vue-draggable-resizable'
+import { ipcRenderer } from 'electron'
+
+import Store from "electron-store";
+const store = new Store()
 
 export default Vue.extend({
   name: 'TodoList' as string,
@@ -125,6 +109,12 @@ export default Vue.extend({
       }
       this.todos.push(parent)
     },
+    closeTodoWin() {
+      store.set("tasks", this.todos)
+      ipcRenderer.send('close-todo-list');
+    }
+  }, created() {
+    if (store.get("tasks") !== undefined) this.todos = store.get("tasks")
   },
   computed: {
     tasksDone(): number {
@@ -135,54 +125,11 @@ export default Vue.extend({
         } else return accu
       }
       return this.todos.reduce(reducer, init)
-    },
-    wWidth() {
-      console.log(window.innerWidth)
-      return window.innerWidth
-    },
-    wHeight() {
-      console.log(window.innerHeight)
-      return window.innerHeight
     }
   },
   data() {
     return {
-      todos: [{
-        title: "todo 1",
-        done: false,
-        children: [{
-          title: "todo1.1",
-          done: false
-        },
-        {
-          title: "todo1.2",
-          done: true
-        },
-        {
-          title: "todo1.3",
-          done: false
-        }
-        ]
-      },
-      {
-        title: "todo 2",
-        done: true,
-        children: []
-      },
-      {
-        title: "todo 3",
-        done: true,
-        children: [{
-          title: "todo1.1",
-          done: true
-        },
-        {
-          title: "todo1.2",
-          done: true
-        }
-        ]
-      }
-      ]
+      todos: []
     }
   }
 
@@ -192,6 +139,10 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .scroll {
   overflow: auto;
+  max-width: 550px;
+  min-width: 550px;
+  max-height: 650px;
+  min-height: 650px;
 }
 
 .no-scroll {
@@ -219,7 +170,6 @@ export default Vue.extend({
   bottom: 0;
   background-color: #202020;
   width: 550px;
-  z-index: 5;
   border-radius: 5px 5px 0px 0px;
   box-shadow: 0 -5px 0 0px rgba($color: rgb(71, 71, 71), $alpha: 0.1);
 }
@@ -229,5 +179,12 @@ export default Vue.extend({
   max-height: 100vh !important;
   width: 100vw !important;
   height: 100vh !important;
+}
+
+.draggable {
+  position: absolute;
+  width: 100%;
+  height: 25px;
+  -webkit-app-region: drag;
 }
 </style>

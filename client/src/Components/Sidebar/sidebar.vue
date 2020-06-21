@@ -33,7 +33,15 @@
       >
         <v-icon small>mdi-bookmark</v-icon>
       </v-btn>
-      <TodoList />
+      <v-btn
+        color
+        fab
+        icon
+        @click="toggleTodoList"
+      >
+        <v-icon small>mdi-playlist-check</v-icon>
+      </v-btn>
+      <!-- <TodoList /> -->
       <alarmMenu />
       <v-btn
         color
@@ -48,7 +56,7 @@
 
 <script>
 import alarmMenu from "../Alarm/AlarmMenu";
-import TodoList from '@/Components/todo-list-manager/TodoList.vue'
+import { ipcRenderer } from 'electron';
 // import browserView from "../Browser/BrowerVue";
 
 // import Vue from "vue";
@@ -57,7 +65,7 @@ import TodoList from '@/Components/todo-list-manager/TodoList.vue'
 export default {
   components: {
     alarmMenu,
-    TodoList  },
+  },
   data() {
     return {
       drawer: true,
@@ -68,16 +76,19 @@ export default {
       ]
     };
   },
-  // methods: {
-  //   newTab() {
-  //     const tabInstance = new windowTab({
-  //       propsData: { url: { link: "https://www.google.com/" } }
-  //     });
-  //     console.log(tabInstance);
-  //     tabInstance.$mount(); // pass nothing
-  //     document.getElementById("contentDiv").appendChild(tabInstance.$el);
-  //   }
-  // }
+  methods: {
+    // newTab() {
+    //   const tabInstance = new windowTab({
+    //     propsData: { url: { link: "https://www.google.com/" } }
+    //   });
+    //   console.log(tabInstance);
+    //   tabInstance.$mount(); // pass nothing
+    //   document.getElementById("contentDiv").appendChild(tabInstance.$el);
+    // }
+    toggleTodoList() {
+      ipcRenderer.send('open-todo-list')
+    }
+  }
 };
 </script>
 
