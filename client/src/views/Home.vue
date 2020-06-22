@@ -1,27 +1,19 @@
 <template>
-  <v-container
-    fluid
-    fill-height
-    class="pa-0"
-  >
+  <v-container fluid fill-height class="pa-0">
     <Controls />
-    <div
-      class="content"
-      id="contentDiv"
-    >
-      <!-- <browerView :url="{link: 'https://www.instagram.com/'}" /> -->
-      <!-- <browerView :url="{link: 'https://www.google.com/'}" /> -->
+    <div class="content" id="contentDiv">
+      <browesrView :url="{link: 'https://www.instagram.com/'}" />
+      <browesrView :url="{link: 'https://www.google.com/'}" />
     </div>
     <sidebar />
   </v-container>
-
 </template>
 
 <script >
 import sidebar from "../Components/Sidebar/sidebar.vue";
-import Controls from '@/Components/Misc/windowControl.vue';
+import Controls from "@/Components/Misc/windowControl.vue";
 
-// import browerView from "../Components/Browser/BrowerVue";
+import browesrView from "../Components/Browser/Tab";
 //import alarmMenu from "../Components/Alarm/AlarmMenu.vue";
 //import { Alarm } from "../Functions/Alarm/main.ts";
 
@@ -35,16 +27,16 @@ export default {
   }),
   components: {
     sidebar,
-    Controls
-    // browerView
+    Controls,
+    browesrView
   },
-  created: function () {
+  created: function() {
     //
   },
   methods: {
     //
   },
-  mounted: function () {
+  mounted: function() {
     this.shit = this.oppai;
   }
 };

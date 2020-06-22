@@ -1,62 +1,38 @@
 <template>
   <div class="drawer">
-    <div
-      class="tabs"
-      id="tabList"
-    >
-      <v-btn
-        color
-        fab
-      >
+    <div class="tabs" id="tabList">
+      <v-btn color fab>
         <v-icon small>mdi-home</v-icon>
       </v-btn>
-      <v-btn
-        color
-        fab
-      >
+      <v-btn color fab @click="OpenNewTab">
         <v-icon small>mdi-plus</v-icon>
       </v-btn>
     </div>
 
     <div class="utils">
-      <v-btn
-        color
-        fab
-        icon
-      >
+      <v-btn color fab icon>
         <v-icon small>mdi-bell</v-icon>
       </v-btn>
-      <v-btn
-        color
-        fab
-        icon
-      >
+      <v-btn color fab icon>
         <v-icon small>mdi-bookmark</v-icon>
       </v-btn>
-      <v-btn
-        color
-        fab
-        icon
-        @click="toggleTodoList"
-      >
+      <v-btn color fab icon @click="toggleTodoList">
         <v-icon small>mdi-playlist-check</v-icon>
       </v-btn>
       <!-- <TodoList /> -->
       <alarmMenu />
-      <v-btn
-        color
-        fab
-        icon
-      >
+      <v-btn color fab icon>
         <v-icon small>mdi-cog</v-icon>
       </v-btn>
     </div>
+    <newTab ref="newTabM" />
   </div>
 </template>
 
 <script>
 import alarmMenu from "../Alarm/AlarmMenu";
-import { ipcRenderer } from 'electron';
+import newTab from "../Browser/NewTab";
+import { ipcRenderer } from "electron";
 // import browserView from "../Browser/BrowerVue";
 
 // import Vue from "vue";
@@ -65,6 +41,7 @@ import { ipcRenderer } from 'electron';
 export default {
   components: {
     alarmMenu,
+    newTab
   },
   data() {
     return {
@@ -77,6 +54,10 @@ export default {
     };
   },
   methods: {
+    OpenNewTab() {
+      console.log("open");
+      this.$refs.newTabM.Toggle();
+    },
     // newTab() {
     //   const tabInstance = new windowTab({
     //     propsData: { url: { link: "https://www.google.com/" } }
@@ -86,7 +67,7 @@ export default {
     //   document.getElementById("contentDiv").appendChild(tabInstance.$el);
     // }
     toggleTodoList() {
-      ipcRenderer.send('open-todo-list')
+      ipcRenderer.send("open-todo-list");
     }
   }
 };

@@ -1,113 +1,124 @@
-'use strict'
+"use strict";
 
-import { app, protocol, BrowserWindow, Notification, ipcMain } from 'electron'
+import { app, protocol, BrowserWindow, Notification, ipcMain } from "electron";
 
-import path from 'path';
+import path from "path";
 
 import {
   createProtocol,
-  installVueDevtools
-} from 'vue-cli-plugin-electron-builder/lib'
-const isDevelopment = process.env.NODE_ENV !== 'production'
+  installVueDevtools,
+} from "vue-cli-plugin-electron-builder/lib";
+const isDevelopment = process.env.NODE_ENV !== "production";
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win: BrowserWindow | null
-let todoWin: BrowserWindow | null
+let win: BrowserWindow | null;
+let todoWin: BrowserWindow | null;
 
 // Scheme must be registered before the app is ready
-protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }])
+protocol.registerSchemesAsPrivileged([
+  { scheme: "app", privileges: { secure: true, standard: true } },
+]);
 
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 1920, height: 1080, fullscreen: true, frame: false, webPreferences: {
+    width: 1920,
+    height: 1080,
+    fullscreen: true,
+    frame: false,
+    webPreferences: {
       nodeIntegration: true,
-      webviewTag: true
-    }
-  })
+      webviewTag: true,
+    },
+  });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string)
-    if (!process.env.IS_TEST) win.webContents.openDevTools()
+    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string);
+    if (!process.env.IS_TEST) win.webContents.openDevTools();
   } else {
-    createProtocol('app')
+    createProtocol("app");
     // Load the index.html when not in development
-    win.loadURL('app://./index.html')
+    win.loadURL("app://./index.html");
   }
 
-  win.on('closed', () => {
-    win = null
-  })
+  win.on("closed", () => {
+    win = null;
+  });
 }
 
 function createWindowTodoList() {
   // Create the browser window.
   if (todoWin != null) {
-    todoWin.show()
-    return
+    todoWin.show();
+    return;
   }
   todoWin = new BrowserWindow({
-    width: 570, height: 660, fullscreen: false, frame: false, webPreferences: {
+    width: 570,
+    height: 660,
+    fullscreen: false,
+    frame: false,
+    webPreferences: {
       nodeIntegration: true,
-      webviewTag: true
+      webviewTag: true,
     },
     skipTaskbar: true,
-    resizable: false
-  })
-  todoWin.setParentWindow(win as BrowserWindow)
-  todoWin.setPosition(20, 400)
+    resizable: false,
+  });
+  todoWin.setParentWindow(win as BrowserWindow);
+  todoWin.setPosition(20, 400);
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    todoWin.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string + "#/todoList")
-    //   if (!process.env.IS_TEST) win.webContents.openDevTools()
-    // } else {
-    //   createProtocol('app')
-    //   // Load the index.html when not in development
-    //   win.loadURL('app://./index.html')
-    // }
-
-    // win.on('closed', () => {
-    //   win = null
-    // })
+    todoWin.loadURL(
+      (process.env.WEBPACK_DEV_SERVER_URL as string) + "#/todoList"
+    );
+    if (!process.env.IS_TEST) todoWin.webContents.openDevTools();
+  } else {
+    createProtocol("app");
+    // Load the index.html when not in development
+    todoWin.loadURL("app://./index.html");
   }
-}
-ipcMain.on('close-todo-list', () => {
-  todoWin?.hide()
-})
 
+  process.on("closed", () => {
+    todoWin = null;
+  });
+}
+ipcMain.on("close-todo-list", () => {
+  todoWin?.hide();
+});
+app.removeAllListeners("ready");
 // Quit when all windows are closed.
-app.on('window-all-closed', () => {
+app.on("window-all-closed", () => {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit()
+  if (process.platform !== "darwin") {
+    app.quit();
   }
-})
+});
 
-app.on('activate', () => {
+app.on("activate", () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (win === null) {
-    createWindow()
+    createWindow();
   }
-})
+});
 
-ipcMain.on('close-win', () => {
-  win?.close()
-})
+ipcMain.on("close-win", () => {
+  win?.close();
+});
 
-ipcMain.on('minimize-win', () => {
-  win?.minimize()
-})
+ipcMain.on("minimize-win", () => {
+  win?.minimize();
+});
 // app.removeAllListeners('ready')
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', async () => {
-  app.setAppUserModelId('com.myapp.Something')
+app.on("ready", async () => {
+  app.setAppUserModelId("com.myapp.Something");
   // app.setAppUserModelId(process.execPath)
 
   if (isDevelopment && !process.env.IS_TEST) {
@@ -118,33 +129,30 @@ app.on('ready', async () => {
     // If you are not using Windows 10 dark mode, you may uncomment these lines
     // In addition, if the linked issue is closed, you can upgrade electron and uncomment these lines
     try {
-      await installVueDevtools()
+      await installVueDevtools();
     } catch (e) {
-      console.error('Vue Devtools failed to install:', e.toString())
+      console.error("Vue Devtools failed to install:", e.toString());
     }
-
   }
 
-  createWindow()
-
-})
-
+  createWindow();
+});
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
-  if (process.platform === 'win32') {
-    process.on('message', data => {
-      if (data === 'graceful-exit') {
-        app.quit()
+  if (process.platform === "win32") {
+    process.on("message", (data) => {
+      if (data === "graceful-exit") {
+        app.quit();
       }
-    })
+    });
   } else {
-    process.on('SIGTERM', () => {
-      app.quit()
-    })
+    process.on("SIGTERM", () => {
+      app.quit();
+    });
   }
 }
 
-ipcMain.on('open-todo-list', () => {
-  createWindowTodoList()
-})
+ipcMain.on("open-todo-list", () => {
+  createWindowTodoList();
+});
